@@ -52,29 +52,29 @@ menu = st.sidebar.radio(
 )
 
 if menu == "🏠 대시보드":
-    from pages import dashboard_ui
+    from custom_pages import dashboard_ui
     dashboard_ui.render()
 elif menu == "📥 데이터 업로드/스키마":
-    from pages import schema_ui
+    from custom_pages import schema_ui
     schema_ui.render()
 elif menu == "📄 문서 벡터화":
-    from pages import vectorize_ui
+    from custom_pages import vectorize_ui
     vectorize_ui.render()
 elif menu == "🔍 통합 검색(QA/RAG)":
-    from pages import search_ui
+    from custom_pages import search_ui
     search_ui.render()
 elif menu == "💬 프롬프트 관리":
-    from pages import prompt_template_ui
+    from custom_pages import prompt_template_ui
     prompt_template_ui.render()
 elif menu == "🔗 데이터 병합/비교":
-    from pages import file_merge_ui
+    from custom_pages import file_merge_ui
     file_merge_ui.render()
 elif menu == "📊 관계/통계 시각화":
-    from pages import visualize_ui
+    from custom_pages import visualize_ui
     visualize_ui.render()
 elif menu == "🕑 이력 관리":
-    from pages import edit_ui
+    from custom_pages import edit_ui
     edit_ui.render()
 elif menu == "⚙️ 사용자 설정":
-    from pages import settings_ui
+    from custom_pages import settings_ui
     settings_ui.render()
