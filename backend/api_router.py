@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, Body, HTTPException
-from .vector_ops import vectorize_file, hybrid_search
-from .db import engine
-from .schema_utils import infer_schema_from_file, auto_create_schema_from_df
+from backend.vector_ops import vectorize_file, hybrid_search
+from backend.db import engine
+from backend.schema_utils import infer_schema_from_file, auto_create_schema_from_df
 
 router = APIRouter()
 
