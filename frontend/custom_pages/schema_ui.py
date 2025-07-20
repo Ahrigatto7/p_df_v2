@@ -1,6 +1,11 @@
 import pandas as pd
 from sqlalchemy import MetaData, Table, Column, Integer, Float, String, DateTime
 import io
+import streamlit as st
+
+def render():
+    st.header("📥 데이터 업로드 및 스키마 자동생성")
+    st.write("여기에 파일 업로드 및 스키마 추출 UI가 들어갑니다.")
 
 def pandas_dtype_to_sqla(dtype):
     if pd.api.types.is_integer_dtype(dtype):
