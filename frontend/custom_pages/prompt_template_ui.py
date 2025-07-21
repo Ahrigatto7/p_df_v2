@@ -1,4 +1,4 @@
-# frontend/pages/prompt_template_ui.py
+# frontend/custom_pages/prompt_template_ui.py
 import streamlit as st
 import requests
 import json

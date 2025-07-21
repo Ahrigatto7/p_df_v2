@@ -98,12 +98,16 @@ run_all.bat
     ├─ vector_ops.py
     ├─ llm_runner.py
 
-📁 frontend/pages/
-    ├─ vectorize_ui.py
-    ├─ search_ui.py
-    ├─ prompt_template_ui.py
+📁 frontend/custom_pages/
+    ├─ dashboard_ui.py
     ├─ document_ui.py
+    ├─ edit_ui.py
     ├─ history_log_ui.py
+    ├─ prompt_template_ui.py
+    ├─ schema_ui.py
+    ├─ search_ui.py
+    ├─ vectorize_ui.py
+    └─ visualize_ui.py
 
 📄 app_dashboard_enhanced.py
 ```
