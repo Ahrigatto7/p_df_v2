@@ -1,80 +1,87 @@
+
 import streamlit as st
-import subprocess
-import time
-import os
-from custom_pages import dashboard_ui
+from datetime import datetime
+import requests
 
-# ---- 모던 스타일 사이드바 꾸미기 ----
-st.set_page_config(page_title="AI 데이터 플랫폼", layout="wide")
-st.markdown("""
-    <style>
-    /* 모던한 사이드바 타이틀 */
-    .sidebar-title {font-size: 26px; font-weight: 700; color: #3D5AFE; margin-bottom: 10px;}
-    .sidebar-section {font-size:15px; color:#555; margin-top:18px;}
-    /* 라디오 버튼 사이 여백 */
-    .sidebar-radio .stRadio > div { gap: 10px; }
-    </style>
-""", unsafe_allow_html=True)
+st.set_page_config(page_title="AI 문서 대시보드", layout="wide")
 
-st.sidebar.markdown('<div class="sidebar-title">🧊 DATA MODERN</div>', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="sidebar-section">메뉴</div>', unsafe_allow_html=True)
-st.sidebar.markdown("---")
-
-def start_backend_if_needed():
-    if "STREAMLIT_CLOUD" in os.environ:
-        return
+# 상태 체크
+def check_backend():
     try:
-        subprocess.Popen(
-            ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        time.sleep(1)
+        res = requests.get("http://localhost:8000/documents")
+        if res.status_code == 200:
+            return True, res.json()
+        else:
+            return False, {}
+    except:
+        return False, {}
+
+# 헤더 및 상태
+st.title("📚 AI 문서 관리 대시보드")
+st.markdown(f"**접속 시각:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+status, data = check_backend()
+if status:
+    st.success("✅ 백엔드 서버 연결됨")
+    if isinstance(data, list):
+        doc_counts = {}
+        for doc in data:
+            dt = doc.get("doc_type", "기타")
+            doc_counts[dt] = doc_counts.get(dt, 0) + 1
+        st.subheader("📊 문서 통계 요약")
+        for dtype, count in doc_counts.items():
+            st.write(f"- **{dtype}**: {count}개")
+else:
+    st.error("❌ 백엔드 서버 연결 실패 - FastAPI가 실행 중인지 확인하세요.")
+
+st.sidebar.title("📊 메뉴")
+menu = st.sidebar.radio("이동", (
+    "📥 문서 업로드/벡터화", 
+    "💬 AI 검색(QA)", 
+    "🧠 프롬프트 관리", 
+    "📄 문서 관리", 
+    "📜 CRUD/이력", 
+    "🕸️ 관계 시각화"
+))
+
+if menu == "📥 문서 업로드/벡터화":
+    try:
+        from pages import vectorize_ui
+        vectorize_ui.render()
     except Exception as e:
-        print(f"❌ 백엔드 실행 실패: {e}")
+        st.error(f"vectorize_ui 오류: {e}")
 
-start_backend_if_needed()
+elif menu == "💬 AI 검색(QA)":
+    try:
+        from pages import search_ui
+        search_ui.render()
+    except Exception as e:
+        st.error(f"search_ui 오류: {e}")
 
-menu = st.sidebar.radio(
-    "",
-    (
-        "🏠 대시보드",
-        "📥 데이터 업로드/스키마",
-        "📄 문서 벡터화",
-        "🔍 통합 검색(QA/RAG)",
-        "💬 프롬프트 관리",
-        "🔗 데이터 병합/비교",
-        "📊 관계/통계 시각화",
-        "🕑 이력 관리",
-        "⚙️ 사용자 설정",
-    ),
-    key="mainmenu"
-)
+elif menu == "🧠 프롬프트 관리":
+    try:
+        from pages import prompt_template_ui
+        prompt_template_ui.render()
+    except Exception as e:
+        st.error(f"prompt_template_ui 오류: {e}")
 
-if menu == "🏠 대시보드":
-    from custom_pages import dashboard_ui
-    dashboard_ui.render()
-elif menu == "📥 데이터 업로드/스키마":
-    from custom_pages import schema_ui
-    schema_ui.render()
-elif menu == "📄 문서 벡터화":
-    from custom_pages import vectorize_ui
-    vectorize_ui.render()
-elif menu == "🔍 통합 검색(QA/RAG)":
-    from custom_pages import search_ui
-    search_ui.render()
-elif menu == "💬 프롬프트 관리":
-    from custom_pages import prompt_template_ui
-    prompt_template_ui.render()
-elif menu == "🔗 데이터 병합/비교":
-    from custom_pages import file_merge_ui
-    file_merge_ui.render()
-elif menu == "📊 관계/통계 시각화":
-    from custom_pages import visualize_ui
-    visualize_ui.render()
-elif menu == "🕑 이력 관리":
-    from custom_pages import edit_ui
-    edit_ui.render()
-elif menu == "⚙️ 사용자 설정":
-    from custom_pages import settings_ui
-    settings_ui.render()
+elif menu == "📄 문서 관리":
+    try:
+        from pages import document_ui
+        document_ui.render()
+    except Exception as e:
+        st.error(f"document_ui 오류: {e}")
+
+elif menu == "📜 CRUD/이력":
+    try:
+        from pages import history_log_ui
+        history_log_ui.render()
+    except Exception as e:
+        st.error(f"history_log_ui 오류: {e}")
+
+elif menu == "🕸️ 관계 시각화":
+    try:
+        from pages import visualize_ui
+        visualize_ui.render()
+    except Exception as e:
+        st.error(f"visualize_ui 오류: {e}")
