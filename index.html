@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로컬 QA 시스템 개발자 런처</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; padding: 2em; }
+        .container { background: white; padding: 2em; border-radius: 10px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        a.button {
+            display: inline-block;
+            margin: 1em 0;
+            padding: 0.75em 1.5em;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.button:hover {
+            background: #2980b9;
+        }
+        code { background: #eee; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 로컬 QA 시스템 런처</h1>
+    <p>이 페이지는 개발 중 로컬 서버를 빠르게 실행하고, Streamlit 앱에 접속할 수 있도록 도와줍니다.</p>
+
+    <h3>1️⃣ 실행 스크립트 (.bat)</h3>
+    <a href="run_all.bat" class="button" download>📦 실행 스크립트 다운로드</a>
+    <p>다운로드 후 더블 클릭하면 <strong>백엔드 + 프론트엔드</strong>가 자동 실행됩니다.</p>
+
+    <h3>2️⃣ Streamlit 앱 접속</h3>
+    <a href="http://localhost:8501" class="button" target="_blank">🌐 Streamlit 앱 열기</a>
+    <p>위 링크는 앱 실행 후 사용 가능합니다.</p>
+
+    <hr>
+    <p><small>개발 경로: <code>/frontend/app_dashboard_enhanced.py</code> + <code>/backend/api_router.py</code></small></p>
+</div>
+</body>
+</html>

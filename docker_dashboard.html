@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Docker 기반 QA 관리자 대시보드</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 2em; }
+        .container { background: white; padding: 2em; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; }
+        a.button {
+            display: inline-block;
+            margin: 1em 0;
+            padding: 0.75em 1.5em;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.button:hover {
+            background: #1e8449;
+        }
+        code { background: #eaeaea; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🐳 Docker 기반 QA 시스템 관리자</h1>
+    <p>이 대시보드는 Docker 기반으로 구성된 QA 시스템을 실행하고 관리하는 도구입니다.</p>
+
+    <h3>📦 Docker 구성 파일</h3>
+    <ul>
+        <li><code>Dockerfile</code> - 백엔드/프론트 서버 빌드용</li>
+        <li><code>docker-compose.yml</code> - 전체 서비스 실행 구성</li>
+        <li><code>.env</code> - 환경 변수 설정</li>
+    </ul>
+
+    <h3>▶️ Docker 실행 명령</h3>
+    <pre><code>docker-compose up --build</code></pre>
+    <p>모든 서비스(backend, streamlit, db)가 함께 실행됩니다.</p>
+
+    <h3>🔗 링크</h3>
+    <a href="http://localhost:8501" class="button" target="_blank">Streamlit 앱 열기</a>
+    <a href="http://localhost:8000/docs" class="button" target="_blank">FastAPI API 문서</a>
+    <a href="http://localhost:5432" class="button" target="_blank">PostgreSQL DB (로컬 연결용)</a>
+
+    <hr>
+    <p><small>📂 개발 디렉토리: backend/, frontend/, docker/, .env</small></p>
+</div>
+</body>
+</html>
