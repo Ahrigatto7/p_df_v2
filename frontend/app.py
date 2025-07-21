@@ -1,18 +1,36 @@
+"""Streamlit entrypoint that dynamically loads all custom pages.
+
+This version scans the ``frontend/custom_pages`` directory for any ``*_ui.py``
+modules and exposes their ``render`` function as a sidebar menu item.  New page
+modules can be added without modifying this file.
+"""
+
+import importlib
+import os
 import streamlit as st
-from pages import vectorize_ui, search_ui, document_ui, prompt_template_ui, history_log_ui
+
+# Directory that contains the page modules
+PAGES_DIR = os.path.join(os.path.dirname(__file__), "custom_pages")
+
+def discover_pages():
+    """Discover all page modules with a ``render`` callable."""
+    pages = {}
+    for fname in os.listdir(PAGES_DIR):
+        if not fname.endswith("_ui.py"):
+            continue
+        module_name = fname[:-3]  # strip ``.py``
+        module = importlib.import_module(f"custom_pages.{module_name}")
+        render_fn = getattr(module, "render", None)
+        if callable(render_fn):
+            # Make a pretty title from the filename
+            title = module_name.replace("_ui", "").replace("_", " ").title()
+            pages[title] = render_fn
+    return pages
+
+PAGES = discover_pages()
 
 st.sidebar.title("AI 문서 QA 시스템")
-page = st.sidebar.radio("메뉴 선택", (
-    "문서 업로드", "검색/질의응답", "문서 관리", "프롬프트 관리", "히스토리 로그"
-))
+page_name = st.sidebar.radio("메뉴 선택", list(PAGES.keys()))
 
-if page == "문서 업로드":
-    vectorize_ui.show()
-elif page == "검색/질의응답":
-    search_ui.show()
-elif page == "문서 관리":
-    document_ui.show()
-elif page == "프롬프트 관리":
-    prompt_template_ui.show()
-elif page == "히스토리 로그":
-    history_log_ui.show()
+# Render the selected page
+PAGES[page_name]()
