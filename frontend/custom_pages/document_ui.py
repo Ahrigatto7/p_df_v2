@@ -1,17 +1,15 @@
 import streamlit as st
-import pandas as pd
 import requests
 
-API_BASE = "http://localhost:8000"
-
 def render():
-    st.header("📂 문서 관리 (유형별)")
+    st.header("📚 업로드된 문서 보기")
+    res = requests.get("http://localhost:8000/documents")
+    documents = res.json().get("documents", [])
 
-    doc_type = st.selectbox("문서 유형 선택", ["규칙", "사례", "용어", "PDF"])
-    try:
-        res = requests.get(f"{API_BASE}/documents", params={"doc_type": doc_type})
-        docs = res.json()
-        df = pd.DataFrame(docs)
-        st.dataframe(df[["id", "title", "doc_type", "created_at"]])
-    except Exception as e:
-        st.error(f"문서 불러오기 실패: {e}")
+    if not documents:
+        st.info("현재 저장된 문서가 없습니다.")
+        return
+
+    for doc in documents:
+        st.markdown(f"**{doc['filename']}** (type: {doc['doc_type']}) - page {doc['page_number']}")
+        st.code(doc['content'], language="markdown")
