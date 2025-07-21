@@ -1,4 +1,4 @@
-
+import os
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.schema import Document
@@ -14,17 +14,23 @@ def vectorize_document(chunks, meta):
 
 def vectorize_file(file, doc_type="PDF", meta=None):
     import tempfile
+    from .pdf_utils import extract_pdf_text, split_text
+    from .db import get_db
+    from .crud import save_extracted_chunks
+
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         tmp.write(file.read())
         path = tmp.name
-
-    from .pdf_utils import extract_pdf_text, split_text
 
     if doc_type == "PDF":
         text = extract_pdf_text(path)
     else:
         text = file.read().decode()
     chunks = split_text(text)
+
+    # DB 저장 로직 추가
+    with next(get_db()) as db:
+        save_extracted_chunks(db, os.path.basename(path), doc_type, chunks)
 
     meta = meta or {}
     meta['doc_type'] = doc_type
