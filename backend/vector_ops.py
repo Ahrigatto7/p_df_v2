@@ -1,8 +1,8 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
-from .pdf_utils import extract_pdf_text, split_text
+from .pdf_utils import extract_text, clean_text, split_text, generate_tags
 from .db import get_db
-from .crud import save_extracted_chunks
+from .models import create_document
 import os
 import tempfile
 
@@ -28,12 +28,10 @@ def vectorize_file(file, doc_type="PDF", meta=None):
         path = tmp.name
 
     try:
-        if doc_type.upper() == "PDF":
-            text = extract_pdf_text(path)
-        else:
-            with open(path, "rb") as f:
-                text = f.read().decode(errors="ignore")
+        text = extract_text(path, doc_type)
+        text = clean_text(text)
         chunks = split_text(text)
+        tags = generate_tags(text)
         meta["doc_type"] = doc_type
         meta["filename"] = os.path.basename(path)
 
@@ -42,9 +40,10 @@ def vectorize_file(file, doc_type="PDF", meta=None):
 
         # SQL DB 저장
         with next(get_db()) as db:
-            save_extracted_chunks(db, meta['filename'], doc_type, chunks)
+            for idx, chunk in enumerate(chunks):
+                create_document(db, meta["filename"], doc_type, idx, chunk)
 
-        return {"msg": "업로드 및 저장 완료", "총청크수": len(chunks)}
+        return {"msg": "업로드 및 저장 완료", "총청크수": len(chunks), "tags": tags}
 
     finally:
         os.remove(path)
