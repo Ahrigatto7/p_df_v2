@@ -6,8 +6,9 @@ def render():
 
     question = st.text_input("질문 입력")
     sources = st.multiselect(
-        "검색 범위", ["규칙", "사례", "용어", "PDF"],
-        default=["규칙", "사례", "용어", "PDF"]
+        "검색 범위",
+        ["PDF", "DOCX", "TXT", "HTML", "MD", "JSON", "XLSX", "규칙", "사례", "용어"],
+        default=["PDF", "DOCX", "TXT", "HTML", "MD", "JSON", "XLSX", "규칙", "사례", "용어"],
     )
 
     if st.button("검색"):

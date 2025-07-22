@@ -20,7 +20,7 @@
       ▼
 🚀 FastAPI (api_router.py)
   ├─ 📚 벡터화 엔진 (vector_ops.py)
-  ├─ 📄 PDF 텍스트 추출 (pdf_utils.py)
+  ├─ 📄 파일 텍스트 추출 (file_utils.py)
   ├─ 🧠 LLM 호출기 (llm_runner.py)
   └─ 🐘 데이터베이스 연동 (models.py, crud.py)
       │
@@ -94,7 +94,7 @@ run_all.bat
     ├─ crud.py
     ├─ db.py / db_init.py
     ├─ models.py
-    ├─ pdf_utils.py
+    ├─ file_utils.py
     ├─ vector_ops.py
     ├─ llm_runner.py
 
