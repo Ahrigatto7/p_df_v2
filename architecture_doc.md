@@ -75,7 +75,7 @@
 
 ```bash
 # 백엔드 실행
-uvicorn backend.api_router:app --reload
+uvicorn backend.main:app --reload
 
 # 프론트 실행
 streamlit run app_dashboard_enhanced.py
