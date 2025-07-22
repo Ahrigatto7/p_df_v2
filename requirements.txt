@@ -19,3 +19,5 @@ PyMuPDF
 pdfplumber
 pytesseract
 Pillow
+bs4
+docx2txt

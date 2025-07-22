@@ -78,7 +78,7 @@
 uvicorn backend.api_router:app --reload
 
 # 프론트 실행
-streamlit run app_dashboard_enhanced.py
+streamlit run frontend/app.py
 
 # 통합 실행 (Windows)
 run_all.bat
@@ -105,7 +105,7 @@ run_all.bat
     ├─ document_ui.py
     ├─ history_log_ui.py
 
-📄 app_dashboard_enhanced.py
+📄 frontend/app.py
 ```
 
 ---

@@ -1,6 +1,0 @@
-
-# DB 저장 연결
-from .db import get_db
-from .crud import save_extracted_chunks
-with next(get_db()) as db:
-    save_extracted_chunks(db, os.path.basename(path), doc_type, chunks)

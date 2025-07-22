@@ -13,7 +13,13 @@ IF NOT EXIST ".env" (
 )
 
 :: Docker 실행
-docker-compose down
-docker-compose up --build
+set COMPOSE_FILE=docker-compose-postgres.yml
+IF NOT EXIST "%COMPOSE_FILE%" (
+    echo ❗ %COMPOSE_FILE% 파일을 찾을 수 없습니다.
+    pause
+    exit /b
+)
+docker-compose -f %COMPOSE_FILE% down
+docker-compose -f %COMPOSE_FILE% up --build
 
 pause

@@ -13,13 +13,13 @@ async def vectorize(
     doc_type: str = Form("PDF"),
 ):
     meta = {"filename": file.filename}
-    return await vectorize_file(file.file, doc_type, meta)
+    return vectorize_file(file.file, doc_type, meta)
 
 @router.post("/search")
 async def search(payload: Dict[str, Any] = Body(...)):
     question = payload.get("question")
     sources = payload.get("sources", ["규칙", "사례", "용어", "PDF"])
-    return await hybrid_search(question, sources=sources)
+    return hybrid_search(question, sources=sources)
 
 @router.get("/prompt_templates")
 async def get_prompt_list():
