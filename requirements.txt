@@ -19,3 +19,5 @@ PyMuPDF
 pdfplumber
 pytesseract
 Pillow
+python-docx
+beautifulsoup4

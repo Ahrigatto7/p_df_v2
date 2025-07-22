@@ -1,18 +1,22 @@
 # AI 문서 QA 시스템
 
-이 저장소는 FastAPI 백엔드와 Streamlit 프론트엔드로 구성된 문서 검색 및 관리 서비스 예제입니다.
+이 저장소는 FastAPI 백엔드와 Streamlit 프론트엔드로 구성된 문서 검색 및 관리 서비스 예제입니다. PDF뿐 아니라 DOCX, HTML, JSON, Excel 등 다양한 형식을 지원하며 업로드 시 자동 정리와 태그 생성 기능을 제공합니다.
 
 ## 실행 방법
 1. 필요한 파이썬 패키지를 설치합니다.
-   ```bash
-   pip install -r requirements.txt
-   ```
+ ```bash
+  pip install -r requirements.txt
+  ```
 2. 프로젝트 루트에 `.env` 파일을 생성하고 다음 환경 변수를 설정합니다.
    ```env
    OPENAI_API_KEY=your-openai-key
    DB_URL=postgresql://user:pass@host:port/dbname  # 선택 사항, 기본은 SQLite
    ```
-3. 백엔드와 프론트엔드를 실행합니다.
+3. 데이터베이스 테이블을 초기화합니다.
+   ```bash
+   python backend/db_init.py
+   ```
+4. 백엔드와 프론트엔드를 실행합니다.
 
 ## 환경 변수
 - **OPENAI_API_KEY**: LLM 호출을 위해 필수로 설정해야 합니다.

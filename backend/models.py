@@ -13,6 +13,7 @@ class Document(Base):
     doc_type = Column(String, index=True)
     page_number = Column(Integer)
     content = Column(Text)
+    tags = Column(JSON, default=list)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 # CRUD FUNCTIONS
@@ -22,14 +23,16 @@ def create_document(
     filename: str,
     doc_type: str,
     page_number: int,
-    content: str
+    content: str,
+    tags: Optional[list] = None
 ) -> Document:
     """문서 생성"""
     doc = Document(
         filename=filename,
         doc_type=doc_type,
         page_number=page_number,
-        content=content
+        content=content,
+        tags=tags or []
     )
     db.add(doc)
     db.commit()
