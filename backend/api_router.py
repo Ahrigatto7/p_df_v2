@@ -53,3 +53,35 @@ async def list_documents(db: Session = Depends(get_db)):
             for doc in documents
         ]
     }
+
+
+@router.get("/qa")
+async def list_qa(db: Session = Depends(get_db)):
+    qas = models.list_qas(db)
+    return {
+        "qas": [
+            {"id": q.id, "question": q.question, "answer": q.answer}
+            for q in qas
+        ]
+    }
+
+
+@router.post("/qa")
+async def create_qa(payload: Dict[str, str] = Body(...), db: Session = Depends(get_db)):
+    qa = models.create_qa(db, payload.get("question", ""), payload.get("answer", ""))
+    return {"id": qa.id, "question": qa.question, "answer": qa.answer}
+
+
+@router.put("/qa/{qa_id}")
+async def update_qa(qa_id: int, payload: Dict[str, str] = Body(...), db: Session = Depends(get_db)):
+    qa = models.update_qa(db, qa_id, payload.get("question"), payload.get("answer"))
+    if qa:
+        return {"msg": "updated"}
+    raise HTTPException(status_code=404, detail="QA not found")
+
+
+@router.delete("/qa/{qa_id}")
+async def delete_qa(qa_id: int, db: Session = Depends(get_db)):
+    if models.delete_qa(db, qa_id):
+        return {"msg": "deleted"}
+    raise HTTPException(status_code=404, detail="QA not found")

@@ -16,6 +16,13 @@ class Document(Base):
     tags = Column(JSON, default=list)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+class QAEntry(Base):
+    __tablename__ = "qa_entries"
+    id = Column(Integer, primary_key=True, index=True)
+    question = Column(String, nullable=False)
+    answer = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
 # CRUD FUNCTIONS
 
 def create_document(
@@ -93,6 +100,53 @@ def delete_document(db: Session, document_id: int) -> bool:
         return False
     try:
         db.delete(doc)
+        db.commit()
+        return True
+    except SQLAlchemyError:
+        db.rollback()
+        return False
+
+
+# ----- QA Entry CRUD -----
+def create_qa(db: Session, question: str, answer: str) -> QAEntry:
+    qa = QAEntry(question=question, answer=answer)
+    db.add(qa)
+    db.commit()
+    db.refresh(qa)
+    return qa
+
+
+def list_qas(db: Session, skip: int = 0, limit: int = 100) -> List[QAEntry]:
+    return db.query(QAEntry).order_by(QAEntry.created_at.desc()).offset(skip).limit(limit).all()
+
+
+def get_qa(db: Session, qa_id: int) -> Optional[QAEntry]:
+    return db.query(QAEntry).filter(QAEntry.id == qa_id).first()
+
+
+def update_qa(db: Session, qa_id: int, question: Optional[str] = None, answer: Optional[str] = None) -> Optional[QAEntry]:
+    qa = db.query(QAEntry).filter(QAEntry.id == qa_id).first()
+    if not qa:
+        return None
+    if question is not None:
+        qa.question = question
+    if answer is not None:
+        qa.answer = answer
+    try:
+        db.commit()
+        db.refresh(qa)
+        return qa
+    except SQLAlchemyError:
+        db.rollback()
+        return None
+
+
+def delete_qa(db: Session, qa_id: int) -> bool:
+    qa = db.query(QAEntry).filter(QAEntry.id == qa_id).first()
+    if not qa:
+        return False
+    try:
+        db.delete(qa)
         db.commit()
         return True
     except SQLAlchemyError:
