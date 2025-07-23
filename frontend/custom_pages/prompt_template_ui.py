@@ -7,21 +7,38 @@ def render():
     st.header("📄 PromptTemplate 관리 및 테스트")
 
     # 템플릿 파일 목록 가져오기
-    files = requests.get("http://localhost:8000/prompt_templates").json()["files"]
+    try:
+        files = requests.get("http://localhost:8000/prompt_templates").json()["files"]
+    except requests.exceptions.ConnectionError:
+        st.error("❌ 백엔드 서버에 연결할 수 없습니다. FastAPI 서버가 실행 중인지 확인하세요.")
+        return
     selected = st.selectbox("🗂 프롬프트 선택", files)
 
     if selected:
         # 템플릿 내용 불러오기
-        content = requests.get("http://localhost:8000/prompt_template", params={"filename": selected}).json()["content"]
+        try:
+            content = requests.get(
+                "http://localhost:8000/prompt_template",
+                params={"filename": selected},
+            ).json()["content"]
+        except requests.exceptions.ConnectionError:
+            st.error("❌ 백엔드 서버에 연결할 수 없습니다. FastAPI 서버가 실행 중인지 확인하세요.")
+            return
         new_content = st.text_area("📝 내용 편집", content, height=300)
 
         if st.button("💾 저장"):
-            res = requests.put(
-                "http://localhost:8000/prompt_template",
-                params={"filename": selected},
-                data=new_content.encode()
-            )
-            st.success("✅ 저장 완료")
+            try:
+                res = requests.put(
+                    "http://localhost:8000/prompt_template",
+                    params={"filename": selected},
+                    data=new_content.encode()
+                )
+                if res.status_code == 200:
+                    st.success("✅ 저장 완료")
+                else:
+                    st.error(f"❌ 저장 실패: {res.status_code} - {res.text}")
+            except requests.exceptions.ConnectionError:
+                st.error("❌ 백엔드 서버에 연결할 수 없습니다. FastAPI 서버가 실행 중인지 확인하세요.")
 
         st.markdown("---")
         st.subheader("⚙️ 프롬프트 테스트")
